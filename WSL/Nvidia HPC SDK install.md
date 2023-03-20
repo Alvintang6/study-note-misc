@@ -5,7 +5,7 @@
 Most of the time, the GPU driver is installed by default. In case the changing of GPU. People can install the GPU driver.
 The GPU driver is installed under the system of win10/win11，choosing you r driver from the list https://developer.nvidia.com/cuda/wsl.
 
-### 2.在WSL2中安装CUDA
+### 2.Install CUDA inside WSL
 Before installing the CUDA make sure you have the GCC installed.
 
 ```shell 
@@ -35,7 +35,7 @@ CUDA_HOME=/usr/local/cuda-11.1; export CUDA_HOME
 export LD_LIBRARY_PATH=/usr/local/cuda-11.1/lib64${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}
 ```
 
-### 3.安装 NVIDIA HPC SDK
+### 3. Install NVIDIA HPC SDK
 
 Before installing the HPC SDK checking your g++ installation.
 

@@ -15,13 +15,10 @@ sudo apt-get install gcc
 Following the steps to install CUDA. Since we already have nvidia gpu driver，we only need to install cuda-toolkit.
 
 ```shell
-wget https://developer.download.nvidia.com/compute/cuda/repos/wsl-ubuntu/x86_64/cuda-wsl-ubuntu.pin
-sudo mv cuda-wsl-ubuntu.pin /etc/apt/preferences.d/cuda-repository-pin-600
-wget https://developer.download.nvidia.com/compute/cuda/11.1.1/local_installers/cuda-repo-wsl-ubuntu-11-1-local_11.1.1-1_amd64.deb
-sudo dpkg -i cuda-repo-wsl-ubuntu-11-1-local_11.1.1-1_amd64.deb
-sudo apt-key add /var/cuda-repo-wsl-ubuntu-11-1-local/7fa2af80.pub
+wget https://developer.download.nvidia.com/compute/cuda/repos/wsl-ubuntu/x86_64/cuda-keyring_1.0-1_all.deb
+sudo dpkg -i cuda-keyring_1.0-1_all.deb
 sudo apt-get update
-sudo apt-get install -y cuda-toolkit-11-1
+sudo apt-get -y install cuda
 ```
 
 
@@ -30,9 +27,9 @@ After installation，the default CUDA installation path is under /usr/local，ch
 adding following command into the ```vim ~/.bahsrc``
 
 ```shell
-export PATH=/usr/local/cuda-11.1/bin${PATH:+:${PATH}}
-CUDA_HOME=/usr/local/cuda-11.1; export CUDA_HOME
-export LD_LIBRARY_PATH=/usr/local/cuda-11.1/lib64${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}
+export PATH=/usr/local/cuda-12.0/bin${PATH:+:${PATH}}
+CUDA_HOME=/usr/local/cuda-12.0; export CUDA_HOME
+export LD_LIBRARY_PATH=/usr/local/cuda-12.0/lib64${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}
 ```
 
 ### 3. Install NVIDIA HPC SDK
@@ -46,9 +43,10 @@ sudo apt-get install g++
 Download the NVIDIA HPC from NVIDIA offical website https://developer.nvidia.com/hpc-sdk (Here I choosing 20.11 which released on 2020.Dec)：
 
 ```shell
-$ wget https://developer.download.nvidia.com/hpc-sdk/20.11/nvhpc_2020_2011_Linux_x86_64_cuda_11.1.tar.gz
-$ tar xpzf nvhpc_2020_2011_Linux_x86_64_cuda_11.1.tar.gz
-$ nvhpc_2020_2011_Linux_x86_64_cuda_11.1/install
+sudo apt-get install gfortran
+$ wget https://developer.download.nvidia.com/hpc-sdk/23.1/nvhpc_2023_231_Linux_x86_64_cuda_12.0.tar.gz
+$ tar xpzf nvhpc_2023_231_Linux_x86_64_cuda_12.0.tar.gz
+$ nvhpc_2023_231_Linux_x86_64_cuda_12.0/install
 ```
 
 After installing HPC SDK，the default installation path of HPC SDK is /opt/nvidia，changing the path with your own software SDK version(here is 20.11 for example)。
@@ -56,8 +54,18 @@ After installing HPC SDK，the default installation path of HPC SDK is /opt/nvid
 ```shell
 NVARCH=`uname -s`_`uname -m`; export NVARCH
 NVCOMPILERS=/opt/nvidia/hpc_sdk; export NVCOMPILERS
-MANPATH=$MANPATH:$NVCOMPILERS/$NVARCH/20.11/compilers/man; export MANPATH
-PATH=$NVCOMPILERS/$NVARCH/20.11/compilers/bin:$PATH; export PATH
+MANPATH=$MANPATH:$NVCOMPILERS/$NVARCH/23.1/compilers/man; export MANPATH
+PATH=$NVCOMPILERS/$NVARCH/23.1/compilers/bin:$PATH; export PATH
+```
+
+```shell
+In bash, sh, or ksh, use these commands:
+
+MANPATH=$MANPATH:/opt/nvidia/hpc_sdk/Linux_x86_64/23.1/compilers/man; export MANPATH PATH=/opt/nvidia/hpc_sdk/Linux_x86_64/23.1/compilers/bin:$PATH; export PATH
+
+export PATH=/opt/nvidia/hpc_sdk/Linux_x86_64/23.1/comm_libs/mpi/bin:$PATH
+export MANPATH=$MANPATH:/opt/nvidia/hpc_sdk/Linux_x86_64/23.1/comm_libs/mpi/man
+
 ```
 
 end of the installation.

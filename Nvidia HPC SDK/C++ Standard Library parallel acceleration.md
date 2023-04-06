@@ -48,3 +48,48 @@ nvc++ -std=c++17 -O4 -fast -stdpar=multicore -o testnv_mp test.cpp
 ```shell
 nvc++ -std=c++17 -O4 -fast -stdpar=gpu -o testnv_gpu test.cpp
 ```
+
+Considering following sample code, for g++ build we remove ```std::execution::par```.
+```c++
+#include <algorithm>
+#include <iostream>
+#include <execution>
+#include <chrono>
+#include <vector>
+#include <stddef.h>
+
+
+int main()
+{
+    std::vector<int> arr(100000000);
+
+    auto start = std::chrono::high_resolution_clock::now(); 
+    std::for_each( std::execution::par, begin(arr), std::end(arr), 
+                    [arrptr = arr.data()](auto & x)
+                    { 
+                        ptrdiff_t i = &x - arrptr;
+                        x = i*100 + 2;
+                    }
+                  
+                  );
+    auto end = std::chrono::high_resolution_clock::now();
+    std::cout<<arr.at(5)<<std::endl;
+    std::chrono::duration<double> diff = end - start;
+    std::cout << "elapsed time = " << diff.count()<<std::endl;
+    return 0;
+}
+
+```
+
+
+```
+root@DESKTOP-M63LVN6:/mnt/c/Users/jie/Desktop/WSL/nvidia_hpc/compiler_performence_test# ./testnv_gpu
+502
+elapsed time = 0.0289199 s
+root@DESKTOP-M63LVN6:/mnt/c/Users/jie/Desktop/WSL/nvidia_hpc/compiler_performence_test# ./testnv_mp
+502
+elapsed time = 0.0334202 s
+root@DESKTOP-M63LVN6:/mnt/c/Users/jie/Desktop/WSL/nvidia_hpc/compiler_performence_test# ./testgxx
+502
+elapsed time = 0.0652803 s
+```
